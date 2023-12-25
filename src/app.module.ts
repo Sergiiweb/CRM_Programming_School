@@ -1,28 +1,32 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { CustomConfigModule } from './config/config.module';
+import { CustomConfigService } from './config/config.service';
+import * as path from "path";
 
 @Module({
   imports: [
+    CustomConfigModule,
     TypeOrmModule.forRootAsync({
-      imports: [],
-      useFactory: () => {
+      imports: [CustomConfigModule],
+      useFactory: (customConfigService: CustomConfigService) => {
         return {
           type: 'mysql',
-          host: 'http://owu.linkpc.net',
-          port: 3306,
-          username: 'progschool',
-          password: 'progschool',
-          database: 'progschool',
-          entities: [],
+          host: customConfigService.db_host,
+          port: customConfigService.db_port,
+          username: customConfigService.db_username,
+          password: customConfigService.db_password,
+          database: customConfigService.db_database,
+          entities: [path.join(__dirname, '**', '*.entity{.js,.ts}')],
           synchronize: true,
         };
       },
-      inject: [],
+      inject: [CustomConfigService],
     }),
     UsersModule,
     AuthModule,
