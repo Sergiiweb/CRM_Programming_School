@@ -4,10 +4,10 @@ import * as path from 'path';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { CustomConfigModule } from './config/config.module';
 import { CustomConfigService } from './config/config.service';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
